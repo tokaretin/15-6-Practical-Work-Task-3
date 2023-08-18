@@ -42,7 +42,7 @@ int main()
             }
             else
             {
-                std::cout << "Entered less than 5 numbers." << std::endl;
+                std::cerr << "Entered less than 5 numbers." << std::endl;
             }
         }
         else
