@@ -16,12 +16,13 @@
 Советы и рекомендации
 Нужно удостовериться, что можно вывести требуемое число (может быть меньше пяти чисел).*/
 #include <iostream>
-#include <vector>
 #include <algorithm>
 
 int main()
 {
-    std::vector<int> numbers;
+    const int maxSize = 5;
+    int arr[maxSize] = { 0 }; // Массив из 5 элементов, инициализированный нулями
+    int currentIndex = 0;     // Текущий индекс для вставки
 
     while (true)
     {
@@ -31,30 +32,48 @@ int main()
 
         if (input == -2)
         {
+            std::cout << "Vector numbers: ";
+            for (int i = 0; i < maxSize; i++)
+            {
+                std::cout << arr[i] << " ";
+            }
+
             break; // Завершение программы при вводе -2
         }
+
         else if (input == -1)
         {
-            if (numbers.size() >= 5)
+            if (currentIndex >= 5)
             {
-                std::sort(numbers.begin(), numbers.end()); // Сортировка по возрастанию вектора
-                std::cout << "Fifth highest increase in number: " << numbers[4] << std::endl; // Пятое по возрастанию число
+                std::sort(arr, arr + maxSize); // После ввода всех элементов, сортируем только первые 5 по возрастанию
+                std::cout << "Fifth highest increase in number: " << arr[4] << std::endl; // Пятое по возрастанию число
             }
             else
             {
-                std::cout << "Entered less than 5 numbers." << std::endl;
+                std::cerr << "Entered less than 5 numbers." << std::endl;
             }
         }
         else
         {
-            numbers.push_back(input); // Добавление числа в вектор
+            if (currentIndex < 5)
+            {
+                arr[currentIndex] = input;
+                currentIndex++;
+            }
+            else if (input < arr[4])
+            {
+                int insertIndex = 3;
+                
+                while (insertIndex >= 0 && arr[insertIndex] > input)
+                {
+                    arr[insertIndex + 1] = arr[insertIndex];
+                    insertIndex--;
+                }
+                arr[insertIndex + 1] = input;
+            }
         }
     }
 
-    std::cout << "Vector numbers: ";
-    for (int i = 0; i < numbers.size(); i++)
-    {
-        std::cout << numbers[i] << " ";
-    }
+   
     return 0;
 }
