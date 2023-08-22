@@ -22,6 +22,7 @@
 (сразу выделенный такого размера и заполненный нулями при старте) и нужно "вставлять" новый элемент в эти 5 , 
 если он меньше максимального. А иначе новое число можно отбрасывать и ничего не сортировать и не двигать. 
 Причем, если при вставке сразу вставлять его в "правильное место", то от сортировки можно вообще отказаться (остается только сдвиг).*/
+
 #include <iostream>
 #include <algorithm>
 
@@ -29,7 +30,7 @@ int main()
 {
     const int maxSize = 5;
     int arr[maxSize] = { 0 }; // Массив из 5 элементов, инициализированный нулями
-    int currentIndex = 0;     // Текущий индекс для вставки
+    int currentSize = 0;     // Текущий индекс для вставки
 
     while (true)
     {
@@ -40,7 +41,7 @@ int main()
         if (input == -2)
         {
             std::cout << "Vector numbers: ";
-            for (int i = 0; i < maxSize; i++)
+            for (int i = 0; i < currentSize; i++)
             {
                 std::cout << arr[i] << " ";
             }
@@ -50,9 +51,9 @@ int main()
 
         else if (input == -1)
         {
-            if (currentIndex >= 5)
+            if (currentSize >= 5)
             {
-                std::sort(arr, arr + maxSize); // После ввода всех элементов, сортируем только первые 5 по возрастанию
+                //std::sort(arr, arr + maxSize); // После ввода всех элементов, сортируем только первые 5 по возрастанию
                 std::cout << "Fifth highest increase in number: " << arr[4] << std::endl; // Пятое по возрастанию число
             }
             else
@@ -62,22 +63,37 @@ int main()
         }
         else
         {
-            if (currentIndex < 5)
+            if (currentSize < 5)
             {
-                arr[currentIndex] = input;
-                currentIndex++;
+                int insertIndex = 0;
+                while (insertIndex < currentSize && arr[insertIndex] <= input)
+                {
+                    insertIndex++;
+                }
+
+                for (int i = currentSize - 1; i >= insertIndex; i--)
+                {
+                    arr[i + 1] = arr[i];
+                }
+                arr[insertIndex] = input;
+                currentSize++;
             }
             else if (input < arr[4])
             {
-                int insertIndex = 3;
-                
-                while (insertIndex >= 0 && arr[insertIndex] > input)
+                int insertIndex = 0;
+
+                while (arr[insertIndex] <= input)
                 {
-                    arr[insertIndex + 1] = arr[insertIndex];
-                    insertIndex--;
+                    insertIndex++;
                 }
-                arr[insertIndex + 1] = input;
+
+                for (int i = 3; i >= insertIndex; i--)
+                {
+                    arr[i + 1] = arr[i];
+                }
+                arr[insertIndex] = input;
             }
+
         }
     }
 
